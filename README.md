@@ -61,6 +61,7 @@ because you have to say the words out loud.
 | `/yt-shorts` | The Shorts already inside a long video, with a new first line written for each. |
 | `/yt-seo` | The description, the tags that are worth having, and the three queries this should win. |
 | `/yt-chapters` | Chapters from a transcript, validated against YouTube's own rules so they render. |
+| `/yt-podcast` | *(esta copia)* Episodio de podcast en video: guía de entrevista, apertura, arco de preguntas, y luego clips, capítulos y paquete. Incluye `clips.py`. |
 | `/yt-audit` | The whole channel, ending in ONE fix rather than twenty. |
 
 ## The six tools
@@ -118,6 +119,7 @@ Esta copia agrega soporte para español sin perder el inglés (las listas se sum
 - `hookscore.py`, `title.py`, `chapters.py`: palabras vacías, vaguedades, verbos de riesgo y preguntas en
   español; la segmentación de palabras ya no descarta caracteres con tilde.
 - `hooks.json`: cada una de las 21 fórmulas incorpora patrones en español.
+- `skills/yt-podcast/`: modo podcast (guía de episodio y reutilización) con `clips.py`, que ordena candidatos a Shorts desde la transcripción. Sus pesos tampoco están calibrados y no distingue una respuesta completa de una réplica a la frase anterior: hay que escuchar antes de cortar.
 - `templates/voice.es.md`: perfil de voz en español, con sección para guaraní y aprobaciones institucionales.
 
 **Advertencia.** Las listas en español se escribieron para esta copia y **no están calibradas** con

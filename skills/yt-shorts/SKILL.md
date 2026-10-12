@@ -19,6 +19,9 @@ Read the transcript and find spans of 20-55 seconds where all three are true:
 2. There is a turn in it - a claim, then something that complicates or proves it.
 3. It ends on a line, not a trail-off.
 
+For a podcast or any long conversation, get a first ranking with
+`python3 ../yt-podcast/clips.py transcript.srt`, then check each candidate by reading it.
+
 Rank the candidates and show the user the top five with their timecodes and first line, so they can
 reject one without reading the whole transcript.
 
