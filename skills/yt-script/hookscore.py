@@ -9,6 +9,10 @@ that leaks at the dead one, and averaging hides that.
     python3 hookscore.py --hook "one line"    # score a single hook
     python3 hookscore.py --json hooks.txt     # machine-readable
 
+LANGUAGE. English and Spanish patterns run together, so a mixed or Spanish hook scores on the same
+five properties. The Spanish lists were written for this fork and have NOT been calibrated against
+real Spanish hooks; the 74-hook measurement below is the original English one.
+
 WHAT THIS CAN AND CANNOT TELL YOU. Measured against 74 real short-form hooks (first 15 seconds of
 auto-captions, top-8 and bottom-8 by views across five channels): it separates deliberately bad
 hooks from real ones well, and it separates a creator's own hits from their own misses barely at
@@ -20,15 +24,24 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FORMULAS = json.load(open(os.path.join(HERE, "hooks.json")))["hooks"]
 
 FILLER = {"basically","actually","literally","just","really","very","so","kind","sort","like",
-          "guys","hey","welcome","today","video","subscribe","channel"}
+          "guys","hey","welcome","today","video","subscribe","channel",
+          "básicamente","realmente","literalmente","solamente","muy","bueno","pues","entonces",
+          "hola","bienvenidos","bienvenidas","hoy","vídeo","suscríbete","suscribite","canal","chicos"}
 VAGUE = {"amazing","incredible","insane","crazy","huge","massive","game","changer","secret",
-         "powerful","ultimate","best","revolutionary","mind","blowing","unbelievable"}
-CONCRETE = re.compile(r"\b(\d[\d,.]*\s?(%|k|m|x|s|m|h)?|\$\d|\d+\s?(second|minute|hour|day|week|month|year)s?)\b", re.I)
-YOU = re.compile(r"\b(you|your|you're|youre|yourself)\b", re.I)
-STAKE = re.compile(r"\b(lose|lost|wasting|waste|quit|fail|broke|cost|risk|before|stop|never|die|dying|dead)\b", re.I)
-CURIOSITY = re.compile(r"\b(why|how|what|which|until|before|but|nobody|almost|except|reason|actually)\b", re.I)
+         "powerful","ultimate","best","revolutionary","mind","blowing","unbelievable",
+         "increíble","impresionante","tremendo","enorme","brutal","secreto","poderoso","definitivo",
+         "mejor","revolucionario","espectacular","alucinante","genial","fantástico","épico"}
+CONCRETE = re.compile(r"\b(\d[\d,.]*\s?(%|k|m|x|s|m|h)?|\$\d|\d+\s?(second|minute|hour|day|week|month|year)s?"
+                      r"|\d+\s?(segundo|minuto|hora|día|dia|semana|mes|año|ano|vez|veces)(s|es)?|(Gs|USD)\.?\s?\d)\b", re.I)
+YOU = re.compile(r"\b(you|your|you're|youre|yourself|tú|tu|tus|te|ti|vos|tenés|sabés|querés|usted|ustedes|su|sus|"
+                 r"vosotros)\b", re.I)
+STAKE = re.compile(r"\b(lose|lost|wasting|waste|quit|fail|broke|cost|risk|before|stop|never|die|dying|dead"
+                r"|perder|pierdes|pierde|perdés|perdiste|perdiendo|desperdici\w+|abandon\w+|fracas\w+|"
+                r"cuesta|costo|costos|riesgo|antes|deja de|dejá de|nunca|jamás|muere|muerto)\b", re.I)
+CURIOSITY = re.compile(r"\b(why|how|what|which|until|before|but|nobody|almost|except|reason|actually"
+                    r"|por qué|porqué|cómo|qué|cuál|cuáles|cuándo|dónde|hasta|pero|nadie|casi|excepto|razón|motivo)\b", re.I)
 
-def words(t): return re.findall(r"[a-z0-9'%$.]+", t.lower())
+def words(t): return re.findall(r"[^\W_][\w'%$.]*", t.lower())  # unicode-aware: keeps tildes and \u00f1
 
 def specificity(t):
     w = words(t)
@@ -54,7 +67,7 @@ def curiosity(t):
     n = len(CURIOSITY.findall(t))
     q = 18 if t.strip().endswith("?") else 0
     # a hook that resolves itself has no gap left
-    closed = -18 if re.search(r"\b(because|so that|which means)\b", t, re.I) else 0
+    closed = -18 if re.search(r"\b(because|so that|which means|porque|para que|lo que significa|por lo tanto)\b", t, re.I) else 0
     return max(0, min(100, 24 + n * 17 + q + closed))
 
 def brevity(t):
@@ -96,7 +109,7 @@ def report(t, parts, verdict, name, hits):
 
 FIX = {
  "SPECIFICITY": "swap one adjective for a number, a name or a date",
- "ADDRESS": "say 'you' in the first six words",
+ "ADDRESS": "say 'you' ('tú', 'vos' or 'usted') in the first six words",
  "STAKES": "name what it costs them to keep doing it the current way",
  "CURIOSITY": "cut the half of the sentence that answers itself",
  "BREVITY": "9 to 24 words. Read it out loud and stop where you run out of breath",

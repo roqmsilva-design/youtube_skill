@@ -108,6 +108,24 @@ writes the line without it.
 
 MIT. Use it, change it, ship it.
 
+## Adaptación al español (esta copia)
+
+Esta copia agrega soporte para español sin perder el inglés (las listas se suman, no se reemplazan):
+
+- `deadair.py`: muletillas en español ("eh", "o sea", "digamos", "a ver", "pues", "este"…) y comparación
+  de repeticiones que respeta tildes y la ñ. Es conservador: no marca "claro" o "bien", porque en un
+  podcast suelen ser respuestas reales de la otra persona.
+- `hookscore.py`, `title.py`, `chapters.py`: palabras vacías, vaguedades, verbos de riesgo y preguntas en
+  español; la segmentación de palabras ya no descarta caracteres con tilde.
+- `hooks.json`: cada una de las 21 fórmulas incorpora patrones en español.
+- `templates/voice.es.md`: perfil de voz en español, con sección para guaraní y aprobaciones institucionales.
+
+**Advertencia.** Las listas en español se escribieron para esta copia y **no están calibradas** con
+videos reales en español; la medición de 74 *hooks* que cita `hookscore.py` es la del original en inglés.
+Un puntaje bajo es motivo para mirar de nuevo, no una sentencia. Para canales institucionales, las
+fórmulas de curiosidad y urgencia deben usarse con criterio: la sobriedad también es una ventaja de
+credibilidad.
+
 ---
 
 ## Origen

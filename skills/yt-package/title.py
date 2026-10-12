@@ -16,11 +16,16 @@ import json, re, sys, os
 
 DESKTOP, MOBILE, HARD = 60, 40, 100
 VAGUE = {"amazing","incredible","insane","crazy","huge","massive","ultimate","best","powerful",
-         "secret","revolutionary","mindblowing","epic","perfect","complete","everything"}
+         "secret","revolutionary","mindblowing","epic","perfect","complete","everything",
+         "increíble","impresionante","tremendo","enorme","brutal","secreto","poderoso","definitivo",
+         "mejor","revolucionario","espectacular","épico","perfecto","completo","todo"}
 STOP = {"the","a","an","of","for","to","in","on","and","or","is","are","with","your","you","my","i",
-        "this","that","it","how","what","why"}
+        "this","that","it","how","what","why",
+        "el","la","los","las","un","una","unos","unas","de","del","al","y","o","en","con","por","para",
+        "que","qué","es","son","tu","tus","su","sus","mi","mis","se","lo","como","cómo","por qué",
+        "este","esta","esto","ese","esa"}
 
-def words(t): return re.findall(r"[a-z0-9']+", t.lower())
+def words(t): return re.findall(r"[^\W_][\w']*", t.lower())  # unicode-aware: keeps tildes and \u00f1
 
 def check(title, thumb=None):
     t = title.strip()

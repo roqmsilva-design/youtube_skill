@@ -20,10 +20,14 @@ from deadair import load, parse_ts  # noqa: E402  (same parser, one implementati
 STOP = set("the a an of for to in on and or is are was were be been with this that it as at by from "
            "you your i my we our they them he she but so if then than there here what which who how "
            "when where why not no yes do does did just really very like about into over out up down "
-           "can could will would should have has had get got make made go going went one two".split())
+           "can could will would should have has had get got make made go going went one two "
+           "el la los las un una unos unas de del al y o en con por para que como pero porque "
+           "es son era eran ser fue ha han he hay muy más menos esto eso esta este ese esa "
+           "yo tú vos usted nosotros ellos ellas mi tu su sus nos les lo se me te si no sí ya "
+           "bueno pues entonces también cuando donde cual quien todo todos algo así aquí allí".split())
 
 def keywords(text):
-    return {w for w in re.findall(r"[a-z']{4,}", text.lower()) if w not in STOP}
+    return {w for w in re.findall(r"[^\W\d_][\w']{3,}", text.lower()) if w not in STOP}
 
 def mmss(t):
     t = int(t); h, m, s = t // 3600, (t % 3600) // 60, t % 60

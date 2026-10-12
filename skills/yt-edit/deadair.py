@@ -14,8 +14,12 @@ runtime you would land on, and you apply it in whatever editor you use. Nothing 
 """
 import json, os, re, sys
 
-FILLER_ONLY = re.compile(r"^[\s,.-]*((um+|uh+|er+|ah+|so|okay|ok|right|yeah|like|anyway|basically|"
-                         r"actually|you know|i mean|let me see|hold on)[\s,.-]*)+$", re.I)
+# English and Spanish together: a bilingual podcast mixes them. The Spanish list is conservative on
+# purpose - "claro", "bien" or "ya" alone are often a real answer from a guest, so they stay out.
+FILLER_ONLY = re.compile(r"^[\s,.\-\u00bf?\u00a1!]*((um+|uh+|er+|ah+|so|okay|ok|right|yeah|like|anyway|basically|"
+                         r"actually|you know|i mean|let me see|hold on|"
+                         r"e+h+m*|m+m+h*|a+h+|este|o sea|pues|bueno|digamos|a ver|vamos a ver|"
+                         r"como te digo|como que|tipo|no s\u00e9)[\s,.\-\u00bf?\u00a1!]*)+$", re.I)
 
 def parse_ts(s):
     s = s.strip().replace(",", ".")
@@ -38,7 +42,7 @@ def load(path):
             cur[2].append(line.strip())
     return [(a, b, " ".join(t)) for a, b, t in cues if t]
 
-def norm(t): return re.sub(r"[^a-z ]", "", t.lower()).split()
+def norm(t): return re.sub(r"[^\w ]|\d|_", "", t.lower()).split()  # keeps accents and \u00f1
 
 def main():
     a = sys.argv[1:]
